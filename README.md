@@ -11,6 +11,13 @@
 
 This preprocessor is based on the webpack [html-loader](https://github.com/webpack-contrib/html-loader).  It works in a similar way and shares some config options.
 
+## Installation
+
+Using npm:
+```bash
+$ npm i -D svelte-assets-preprocessor
+```
+
 ## Example
 
 ### Input
