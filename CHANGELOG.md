@@ -1,3 +1,3 @@
-# Unpublished
+# 0.0.2
 
-* Initial commit
+* Added CI integration and automatic publishing.
