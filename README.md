@@ -1,3 +1,5 @@
+![Node.js CI](https://github.com/pchynoweth/svelte-assets-preprocessor/workflows/Node.js%20CI/badge.svg)
+
 # svelte-assets-preprocessor
 
 > A [Svelte](https://svelte.dev) preprocessor that extracts assets.
