@@ -1,10 +1,15 @@
 {
-  "name": "node-typescript-boilerplate",
-  "version": "0.0.0",
-  "description": "Minimalistic boilerplate to quick-start Node.js development in TypeScript.",
+  "name": "svelte-assets-preprocessor",
+  "version": "0.0.1",
+  "description": "Assets preprocessor for Svelte JS.",
   "engines": {
     "node": ">= 12.13 <13"
   },
+  "main": "build/src/main.js",
+  "types": "build/src/main.d.ts",
+  "files": [
+    "build/src"
+  ],
   "devDependencies": {
     "@types/jest": "~25.2.1",
     "@types/node": "~12.12.38",
@@ -21,16 +26,19 @@
     "typescript": "~3.8.3"
   },
   "scripts": {
-    "clean": "rimraf coverage build tmp",
+    "clean": "rimraf coverage dist tmp",
     "build": "tsc -p tsconfig.release.json",
     "build:watch": "tsc -w -p tsconfig.release.json",
     "lint": "eslint . --ext .ts,.tsx",
     "test": "jest --coverage",
-    "test:watch": "jest --watch"
+    "test:watch": "jest --watch",
+    "prepare": "npm run build"
   },
-  "author": "Jakub Synowiec <github@jakubsynowiec.info>",
-  "license": "Apache-2.0",
+  "author": "Peter Chynoweth <24738364+pchynoweth@users.noreply.github.com>",
+  "license": "MIT",
   "dependencies": {
+    "node-html-parser": "^1.2.17",
+    "svelte": "^3.23.0",
     "tslib": "~1.11.2"
   }
 }

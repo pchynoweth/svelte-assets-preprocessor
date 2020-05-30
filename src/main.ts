@@ -1,32 +1,87 @@
-/**
- * Some predefined delays (in milliseconds).
- */
-export enum Delays {
-  Short = 500,
-  Medium = 2000,
-  Long = 5000,
-}
+import { HTMLElement, Node, NodeType, parse } from 'node-html-parser';
+import { PreprocessorGroup, Processed } from 'svelte/types/compiler/preprocess';
+import { DEFAULT_OPTIONS, Options } from './defaults';
 
-/**
- * Returns a Promise<string> that resolves after given time.
- *
- * @param {string} name - A name.
- * @param {number=} [delay=Delays.Medium] - Number of milliseconds to delay resolution of the Promise.
- * @returns {Promise<string>}
- */
-function delayedHello(
-  name: string,
-  delay: number = Delays.Medium,
-): Promise<string> {
-  return new Promise((resolve: (value?: string) => void) =>
-    setTimeout(() => resolve(`Hello, ${name}`), delay),
-  );
-}
+interface Output {
+  n: number;
+  assets: Map<string, string>;
+  script?: HTMLElement;
+};
 
-// Below are examples of using ESLint errors suppression
-// Here it is suppressing missing return type definitions for greeter function
+function preprocess(options?: Options): PreprocessorGroup {
+  options = Object.assign({}, DEFAULT_OPTIONS, options);
+  options.exclude.push((attr) => /\{.*\}/.test(attr));
 
-// eslint-disable-next-line @typescript-eslint/explicit-function-return-type
-export async function greeter(name: string) {
-  return await delayedHello(name, Delays.Long);
-}
+  function addAsset(asset: string, out: Output): string {
+    const existing = out.assets.get(asset);
+    if (existing) return existing;
+
+    const name = options.prefix + out.n++;
+    out.assets.set(asset, name);
+    return name;
+  }
+
+  function traverse(node: Node, out: Output): void {
+    node.childNodes.forEach((child) => {
+      if (child.nodeType === NodeType.ELEMENT_NODE) {
+        const html = child as HTMLElement;
+        const cfgs = options.attributes.filter((ac) => ac.tag === html.tagName);
+        if (cfgs.length) {
+          cfgs.forEach((cfg) => {
+            const attr = html.attributes[cfg.attribute];
+            if (attr &&
+              (!cfg.filter || cfg.filter(cfg.tag, cfg.attribute, html.attributes)) &&
+              options.exclude.every((exclude) => !exclude(attr))) {
+              if (cfg.type === 'src') {
+                html.setAttribute(cfg.attribute, '{' + addAsset(attr, out) + '}');
+              }
+              else {
+                const srcs = attr.split(',').map((src) => {
+                  const vals = src.split(' ');
+                  vals[0] = '${' + addAsset(vals[0], out) + '}';
+                  if (vals.length > 1) vals[1] = ` ${vals[1]}`;
+                  return vals.join('');
+                }).join(`,`);
+                html.setAttribute(cfg.attribute, '{`' + srcs + '`}');
+              }
+            }
+          });
+        }
+
+        if (html.tagName === 'script' && html.attributes.src === undefined && html.attributes.context === undefined) {
+          out.script = html;
+        }
+        traverse(child, out);
+      }
+    });
+  }
+
+  return {
+    markup({ content }): Processed {
+      const root = parse(content, { script: true, style: true, pre: true }) as HTMLElement;
+      const out: Output = { n: 1, assets: new Map<string, string>() };
+      traverse(root, out);
+      if (out.assets.size) {
+        let imports = '';
+        out.assets.forEach((value, key) => {
+          imports += `import ${value} from '${key}';`;
+        });
+
+        if (out.script) {
+          out.script.set_content(imports + out.script.innerHTML.toString());
+        }
+        else {
+          return {
+            code: `<script>${imports}</script>${root.toString()}`
+          };
+        }
+      }
+
+      return {
+        code: root.toString()
+      };
+    }
+  };
+};
+
+export default exports = module.exports = preprocess;

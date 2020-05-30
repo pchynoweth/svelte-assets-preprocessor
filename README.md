@@ -1,99 +1,207 @@
-[![TypeScript version][ts-badge]][typescript-38]
-[![Node.js version][nodejs-badge]][nodejs]
-[![APLv2][license-badge]][LICENSE]
-[![Build Status - Travis][travis-badge]][travis-ci]
-[![Build Status - GitHub Actions][gha-badge]][gha-ci]
-[![Sponsor][sponsor-badge]][sponsor]
+# svelte-assets-preprocessor
 
-# node-typescript-boilerplate
+> A [Svelte](https://svelte.dev) preprocessor that extracts assets.
 
-👩🏻‍💻 Developer Ready: A comprehensive template. Works out of the box for most [Node.js][nodejs] projects.
+## Overview
 
-🏃🏽 Instant Value: All basic tools included and configured:
+This preprocessor is based on the webpack [html-loader](https://github.com/webpack-contrib/html-loader).  It works in a similar way and shares some config options.
 
-+ [TypeScript][typescript] [3.8][typescript-38]
-+ [ESLint][eslint] with some initial rules recommendation
-+ [Jest][jest] for fast unit testing and code coverage
-+ Type definitions for Node.js and Jest
-+ [Prettier][prettier] to enforce consistent code style
-+ NPM [scripts](#available-scripts) for common operations
-+ simple example of TypeScript code and unit test
-+ .editorconfig for consistent file format
-+ example configuration for [GitHub Actions][gh-actions] and [Travis CI][travis]
+## Example
 
-🤲 Free as in speech: available under the APLv2 license.
+### Input
 
-## Getting Started
-
-This project is intended to be used with the latest Active LTS release of [Node.js][nodejs].
-
-### Use as a repository template
-
-To start, just click the **[Use template][repo-template-action]** link (or the green button). Now start adding your code in the `src` and unit tests in the `__tests__` directories.
-
-### Clone repository
-
-To clone the repository use the following commands:
-
-```sh
-git clone https://github.com/jsynowiec/node-typescript-boilerplate
-cd node-typescript-boilerplate
-npm install
+```html
+<img src="./example.png">
 ```
 
-### Download latest release
+### Output
 
-Download and unzip current `master` branch or one of tags:
+```html
+<script>
+    import ___ASSET___1 from './example.png';
+</script>
 
-```sh
-wget https://github.com/jsynowiec/node-typescript-boilerplate/archive/master.zip -O node-typescript-boilerplate.zip
-unzip node-typescript-boilerplate.zip && rm node-typescript-boilerplate.zip
+<img src="{___ASSET___1}">
 ```
 
-## Available Scripts
+## Usage
 
-+ `clean` - remove coverage data, Jest cache and transpiled files,
-+ `build` - transpile TypeScript to ES6,
-+ `build:watch` - interactive watch mode to automatically transpile source files,
-+ `lint` - lint source files and tests,
-+ `test` - run tests,
-+ `test:watch` - interactive watch mode to automatically re-run tests
+### With `rollup-plugin-svelte`
 
-## Additional Informations
+```js
+// rollup.config.js
+import svelte from 'rollup-plugin-svelte';
+import assetPreprocessor from 'svelte-assets-preprocessor'
 
-### Writing tests in JavaScript
+export default {
+  ...,
+  plugins: [
+    svelte({
+      preprocess: assetsPreprocessor({ /* options */ })
+    })
+  ]
+}
+```
 
-Writing unit tests in TypeScript can sometimes be troublesome and confusing. Especially when mocking dependencies and using spies.
+### With `svelte-loader`
 
-This is **optional**, but if you want to learn how to write JavaScript tests for TypeScript modules, read the [corresponding wiki page][wiki-js-tests].
+```js
+  ...
+  module: {
+    rules: [
+      ...
+      {
+        test: /\.(html|svelte)$/,
+        exclude: /node_modules/,
+        use: {
+          loader: 'svelte-loader',
+          options: {
+            preprocess: require('svelte-assets-preprocessor')({ /* options */ })
+          },
+        },
+      },
+      ...
+    ]
+  }
+  ...
+```
 
-## Backers & Sponsors
+### With Sapper
 
-Support this project by becoming a sponsor.
+[Sapper](https://sapper.svelte.dev/) has two build configurations, one for the client bundle and one for the server. To use `svelte-assets-preprocessor` with Sapper, you need to define it on both configurations.
 
-## License
-Licensed under the APLv2. See the [LICENSE](https://github.com/jsynowiec/node-typescript-boilerplate/blob/master/LICENSE) file for details.
+```js
+// ...
+import assetsPreprocessor from 'svelte-assets-preprocessor';
 
-[ts-badge]: https://img.shields.io/badge/TypeScript-3.8-blue.svg
-[nodejs-badge]: https://img.shields.io/badge/Node.js->=%2012.13-blue.svg
-[nodejs]: https://nodejs.org/dist/latest-v12.x/docs/api/
-[travis-badge]: https://travis-ci.org/jsynowiec/node-typescript-boilerplate.svg?branch=master
-[travis-ci]: https://travis-ci.org/jsynowiec/node-typescript-boilerplate
-[gha-badge]: https://img.shields.io/endpoint.svg?url=https%3A%2F%2Factions-badge.atrox.dev%2Fjsynowiec%2Fnode-typescript-boilerplate%2Fbadge&style=flat
-[gha-ci]: https://github.com/jsynowiec/node-typescript-boilerplate/actions
-[typescript]: https://www.typescriptlang.org/
-[typescript-38]: https://www.typescriptlang.org/docs/handbook/release-notes/typescript-3-8.html
-[license-badge]: https://img.shields.io/badge/license-APLv2-blue.svg
-[license]: https://github.com/jsynowiec/node-typescript-boilerplate/blob/master/LICENSE
+const preprocess = assetsPreprocessor({
+  postcss: true,
+  // ...
+});
 
-[sponsor-badge]: https://img.shields.io/badge/♥-Sponsor-fc0fb5.svg
-[sponsor]: https://github.com/sponsors/jsynowiec
+export default {
+  client: {
+    plugins: [
+      svelte({
+        preprocess,
+        // ...
+      }),
+  },
+  server: {
+    plugins: [
+      svelte({
+        preprocess,
+        // ...
+      }),
+    ],
+  },
+};
+```
 
-[jest]: https://facebook.github.io/jest/
-[eslint]: https://github.com/eslint/eslint
-[wiki-js-tests]: https://github.com/jsynowiec/node-typescript-boilerplate/wiki/Unit-tests-in-plain-JavaScript
-[prettier]: https://prettier.io
-[gh-actions]: https://github.com/features/actions
-[travis]: https://travis-ci.org
+## Options
 
-[repo-template-action]: https://github.com/jsynowiec/node-typescript-boilerplate/generate
+### `attributes`
+
+A list of tags and attributes to process.  For each tag and attribute a type is provided ('src' or 'srcset') and an optional filter function.  The filter function can be used to add further conditions.
+
+#### Default
+
+```js
+[
+  {
+    tag: 'audio',
+    attribute: 'src',
+    type: 'src',
+  },
+  {
+    tag: 'embed',
+    attribute: 'src',
+    type: 'src',
+  },
+  {
+    tag: 'img',
+    attribute: 'src',
+    type: 'src',
+  },
+  {
+    tag: 'img',
+    attribute: 'srcset',
+    type: 'srcset',
+  },
+  {
+    tag: 'input',
+    attribute: 'src',
+    type: 'src',
+  },
+  {
+    tag: 'link',
+    attribute: 'href',
+    type: 'src',
+    filter: (tag, attribute, attributes) => {
+      if (!attributes.rel || !/stylesheet/i.test(attributes.rel)) {
+        return false;
+      }
+
+      if (
+        attributes.type &&
+        attributes.type.trim().toLowerCase() !== 'text/css'
+      ) {
+        return false;
+      }
+
+      return true;
+    },
+  },
+  {
+    tag: 'object',
+    attribute: 'data',
+    type: 'src',
+  },
+  {
+    tag: 'script',
+    attribute: 'src',
+    type: 'src',
+  },
+  {
+    tag: 'source',
+    attribute: 'src',
+    type: 'src',
+  },
+  {
+    tag: 'source',
+    attribute: 'srcset',
+    type: 'srcset',
+  },
+  {
+    tag: 'track',
+    attribute: 'src',
+    type: 'src',
+  },
+  {
+    tag: 'video',
+    attribute: 'poster',
+    type: 'src',
+  },
+  {
+    tag: 'video',
+    attribute: 'src',
+    type: 'src',
+  },
+];
+```
+
+### `prefix`
+
+The prefix used for generated variable names.
+
+#### Default `___ASSET___`
+
+### `exclude`
+
+A list of functions used to exclude specific assets.  By default all assets starting with http are excluded.  To enable these set this to `[]`.
+
+#### Default
+
+```
+[ (attr) => /^https?:/.test(attr) ]
+```
