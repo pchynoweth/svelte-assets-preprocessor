@@ -1,4 +1,5 @@
 ![Node.js CI](https://github.com/pchynoweth/svelte-assets-preprocessor/workflows/Node.js%20CI/badge.svg)
+![new-version](https://github.com/pchynoweth/svelte-assets-preprocessor/workflows/new-version/badge.svg)
 [![Build Status](https://travis-ci.org/pchynoweth/svelte-assets-preprocessor.svg?branch=master)](https://travis-ci.org/pchynoweth/svelte-assets-preprocessor)
 
 # svelte-assets-preprocessor
