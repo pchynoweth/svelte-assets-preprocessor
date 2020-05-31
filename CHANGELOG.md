@@ -1,6 +1,6 @@
 # CHANGELOG
 
-## UNRELEASED
+## 0.0.3
 
 * Fixed README examples.
 * Added `options.http`.
