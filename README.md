@@ -61,7 +61,7 @@ export default {
 
 ### With `svelte-loader`
 
-You will need to install another loader to handle the imports appropriately such as [file-loader](https://webpack.js.org/loaders/file-loader/) or [url-loader](https://webpack.js.org/loaders/file-loader/).
+You will need to install another loader to handle the imports appropriately such as [file-loader](https://webpack.js.org/loaders/file-loader/) or [url-loader](https://webpack.js.org/loaders/url-loader/).
 
 ```js
   ...
