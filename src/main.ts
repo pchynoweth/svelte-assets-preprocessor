@@ -1,6 +1,7 @@
 import { HTMLElement, Node, NodeType, parse } from 'node-html-parser';
 import { PreprocessorGroup, Processed } from 'svelte/types/compiler/preprocess';
 import { DEFAULT_OPTIONS, Options } from './defaults';
+import * as _ from 'lodash';
 
 interface Output {
   n: number;
@@ -9,7 +10,10 @@ interface Output {
 };
 
 function preprocess(options?: Options): PreprocessorGroup {
-  options = Object.assign({}, DEFAULT_OPTIONS, options);
+  options = _.cloneDeep(Object.assign({}, DEFAULT_OPTIONS, options));
+  if (!options.http) {
+    options.exclude.push((attr) => /^https?:/.test(attr));
+  }
   options.exclude.push((attr) => /\{.*\}/.test(attr));
 
   function addAsset(asset: string, out: Output): string {

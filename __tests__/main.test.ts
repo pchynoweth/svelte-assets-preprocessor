@@ -67,6 +67,21 @@ describe('exclude', () => {
     `
     expect((fixture.markup({ content: input, filename: 'dummy' }) as Processed).code).not.toBe(input);
   });
+
+  it.each([
+    [ 'http', 'http://example.com' ],
+    [ 'https', 'https://example.com' ]
+  ])('%s does not get excluded when enabled in options', (_desc, value) => {
+    const p = preprocess({ http: true });
+    const input = `
+      <script>
+        const test = 'test string';
+      </script>
+
+      <img src="${value}">
+    `;
+    expect((p.markup({ content: input, filename: 'dummy' }) as Processed).code).not.toBe(input);
+  });
 });
 
 describe('Pages with script tags', () => {

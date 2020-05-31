@@ -40,14 +40,18 @@ $ npm i -D svelte-assets-preprocessor
 
 ### With `rollup-plugin-svelte`
 
+You will need to use [@rollup/plugin-url](https://github.com/rollup/plugins/tree/master/packages/url) to load assets.
+
 ```js
 // rollup.config.js
 import svelte from 'rollup-plugin-svelte';
 import assetPreprocessor from 'svelte-assets-preprocessor'
+import url from '@rollup/plugin-url'
 
 export default {
   ...,
   plugins: [
+    url({ destDir: 'public' }),
     svelte({
       preprocess: assetsPreprocessor({ /* options */ })
     })
@@ -57,18 +61,27 @@ export default {
 
 ### With `svelte-loader`
 
+You will need to install another loader to handle the imports appropriately such as [file-loader](https://webpack.js.org/loaders/file-loader/) or [url-loader](https://webpack.js.org/loaders/file-loader/).
+
 ```js
   ...
   module: {
     rules: [
       ...
       {
+        test: /\.(png|svg|jpg|gif)$/,
+        loader: 'file-loader',
+        options: {
+          outputPath: 'images',
+        }
+	    },
+      {
         test: /\.(html|svelte)$/,
         exclude: /node_modules/,
         use: {
           loader: 'svelte-loader',
           options: {
-            preprocess: require('svelte-assets-preprocessor')({ /* options */ })
+            preprocess: require('svelte-assets-preprocessor')({ /* options */ exclude: [ (attr) => !/\.(png|svg|jpg|gif)$/.test(attr)} ])
           },
         },
       },
@@ -80,16 +93,15 @@ export default {
 
 ### With Sapper
 
-[Sapper](https://sapper.svelte.dev/) has two build configurations, one for the client bundle and one for the server. To use `svelte-assets-preprocessor` with Sapper, you need to define it on both configurations.
+[Sapper](https://sapper.svelte.dev/) has two build configurations, one for the client bundle and one for the server. To use `svelte-assets-preprocessor` with Sapper, you need to define it on both configurations.  You will need to use [@rollup/plugin-url](https://github.com/rollup/plugins/tree/master/packages/url) to load assets.
 
 ```js
 // ...
 import assetsPreprocessor from 'svelte-assets-preprocessor';
+import path from 'path';
+import url from '@rollup/plugin-url';
 
-const preprocess = assetsPreprocessor({
-  postcss: true,
-  // ...
-});
+const preprocess = assetsPreprocessor({});
 
 export default {
   client: {
@@ -98,6 +110,10 @@ export default {
         preprocess,
         // ...
       }),
+      url({
+				fileName: path.join('client', 'assets', '[name].[hash][extname]'),
+				destDir: path.resolve(config.client.output().dir, '..')
+			}),
   },
   server: {
     plugins: [
@@ -105,6 +121,10 @@ export default {
         preprocess,
         // ...
       }),
+      url({
+				fileName: path.join('server', 'assets', '[name].[hash][extname]'),
+				destDir: path.resolve(config.server.output().dir, '..')
+			}),
     ],
   },
 };
@@ -202,18 +222,30 @@ A list of tags and attributes to process.  For each tag and attribute a type is 
 ];
 ```
 
+### `exclude`
+
+A list of functions used to exclude specific assets.  By default all assets starting with http are excluded.  To enable these set this to `[]`.
+
+#### Default `[]`
+
+#### Example
+
+Only apply to images with specific extensions.
+
+```js
+...
+exclude: [ (attr) => !/\.(png|svg|jpg|gif)$/.test(attr)} ]
+...
+```
+
+### `http`
+
+Process urls starting with `http`.  This is disabled by default.
+
+#### Default `false`
+
 ### `prefix`
 
 The prefix used for generated variable names.
 
 #### Default `___ASSET___`
-
-### `exclude`
-
-A list of functions used to exclude specific assets.  By default all assets starting with http are excluded.  To enable these set this to `[]`.
-
-#### Default
-
-```
-[ (attr) => /^https?:/.test(attr) ]
-```

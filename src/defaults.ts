@@ -15,6 +15,7 @@ export interface Options {
   attributes?: AttributesConfig;
   prefix?: string;
   exclude?: ExcludeFunction[];
+  http?: boolean;
 };
 
 export const DEFAULT_ATTRIBUTES: AttributesConfig = [
@@ -102,7 +103,6 @@ export const DEFAULT_ATTRIBUTES: AttributesConfig = [
 export const DEFAULT_OPTIONS: Options = {
   attributes: DEFAULT_ATTRIBUTES,
   prefix: '___ASSET___',
-  exclude: [
-    (attr): boolean => /^https?:/.test(attr)
-  ]
+  exclude: [],
+  http: false
 };
