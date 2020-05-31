@@ -74,7 +74,7 @@ You will need to install another loader to handle the imports appropriately such
         options: {
           outputPath: 'images',
         }
-	    },
+      },
       {
         test: /\.(html|svelte)$/,
         exclude: /node_modules/,
@@ -111,9 +111,9 @@ export default {
         // ...
       }),
       url({
-				fileName: path.join('client', 'assets', '[name].[hash][extname]'),
-				destDir: path.resolve(config.client.output().dir, '..')
-			}),
+        fileName: path.join('client', 'assets', '[name].[hash][extname]'),
+        destDir: path.resolve(config.client.output().dir, '..')
+      }),
   },
   server: {
     plugins: [
@@ -122,9 +122,9 @@ export default {
         // ...
       }),
       url({
-				fileName: path.join('server', 'assets', '[name].[hash][extname]'),
-				destDir: path.resolve(config.server.output().dir, '..')
-			}),
+        fileName: path.join('server', 'assets', '[name].[hash][extname]'),
+        destDir: path.resolve(config.server.output().dir, '..')
+      }),
     ],
   },
 };
