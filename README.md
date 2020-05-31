@@ -224,7 +224,7 @@ A list of tags and attributes to process.  For each tag and attribute a type is 
 
 ### `exclude`
 
-A list of functions used to exclude specific assets.  By default all assets starting with http are excluded.  To enable these set this to `[]`.
+A list of functions used to exclude specific assets.
 
 #### Default `[]`
 
