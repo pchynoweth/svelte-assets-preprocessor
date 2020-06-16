@@ -45,7 +45,7 @@ You will need to use [@rollup/plugin-url](https://github.com/rollup/plugins/tree
 ```js
 // rollup.config.js
 import svelte from 'rollup-plugin-svelte';
-import assetPreprocessor from 'svelte-assets-preprocessor'
+import assetsPreprocessor from 'svelte-assets-preprocessor'
 import url from '@rollup/plugin-url'
 
 export default {
