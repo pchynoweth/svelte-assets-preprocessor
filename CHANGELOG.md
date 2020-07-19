@@ -1,5 +1,9 @@
 # CHANGELOG
 
+## 0.0.4
+
+* Upgraded lodash due to security alert
+
 ## 0.0.3
 
 * Fixed README examples.
