@@ -41,7 +41,7 @@
   "author": "Peter Chynoweth <24738364+pchynoweth@users.noreply.github.com>",
   "license": "MIT",
   "dependencies": {
-    "lodash": "^4.17.15",
+    "lodash": ">=4.17.19",
     "node-html-parser": "^1.2.18",
     "svelte": "^3.23.0",
     "tslib": "~2.0.0"
