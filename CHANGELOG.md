@@ -1,5 +1,10 @@
 # CHANGELOG
 
+## 0.0.6
+
+* Upgraded packages
+* Upgraded HTML Parser to v1.4.5
+
 ## 0.0.5
 
 * Upgraded packages

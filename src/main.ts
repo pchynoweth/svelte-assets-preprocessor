@@ -29,7 +29,7 @@ function preprocess(options?: Options): PreprocessorGroup {
     node.childNodes.forEach((child) => {
       if (child.nodeType === NodeType.ELEMENT_NODE) {
         const html = child as HTMLElement;
-        const cfgs = options.attributes.filter((ac) => ac.tag === html.tagName);
+        const cfgs = options.attributes.filter((ac) => ac.tag === html.rawTagName);
         if (cfgs.length) {
           cfgs.forEach((cfg) => {
             const attr = html.attributes[cfg.attribute];
@@ -52,7 +52,7 @@ function preprocess(options?: Options): PreprocessorGroup {
           });
         }
 
-        if (html.tagName === 'script' && html.attributes.src === undefined && html.attributes.context === undefined) {
+        if (html.rawTagName === 'script' && html.attributes.src === undefined && html.attributes.context === undefined) {
           out.script = html;
         }
         traverse(child, out);
@@ -62,7 +62,7 @@ function preprocess(options?: Options): PreprocessorGroup {
 
   return {
     markup({ content }): Processed {
-      const root = parse(content, { script: true, style: true, pre: true }) as HTMLElement;
+      const root = parse(content, { blockTextElements: { script: true, noscript: true, style: true, pre: true } }) as HTMLElement;
       const out: Output = { n: 1, assets: new Map<string, string>() };
       traverse(root, out);
       if (out.assets.size) {
