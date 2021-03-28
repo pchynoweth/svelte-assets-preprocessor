@@ -1,5 +1,10 @@
 # CHANGELOG
 
+## 0.0.7
+
+* Upgraded packages
+* Changed include for svelte types
+
 ## 0.0.6
 
 * Upgraded packages
