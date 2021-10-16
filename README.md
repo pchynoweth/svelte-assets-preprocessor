@@ -130,6 +130,28 @@ export default {
 };
 ```
 
+### With SvelteKit
+
+With [Sveltekit](https://kit.svelte.dev/), [svelte-preprocess](https://github.com/sveltejs/svelte-preprocess) is not a requirement if you just need to preprocess assets.
+
+You can also configure your [assets](https://kit.svelte.dev/docs#configuration-files) folder using `kit.files.assets`. 
+
+```js
+// svelte.config.js
+import importAssets from 'svelte-preprocess-import-assets'
+
+const config = {
+    preprocess: [importAssets()],
+    kit: {
+        files: {
+			assets: 'static'
+        }
+        // ...
+    }
+    // ...
+};
+```
+
 ## Options
 
 ### `attributes`
