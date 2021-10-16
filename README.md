@@ -138,13 +138,13 @@ You can also configure your [assets](https://kit.svelte.dev/docs#configuration-f
 
 ```js
 // svelte.config.js
-import importAssets from 'svelte-preprocess-import-assets'
+import assetsPreprocessor from 'svelte-assets-preprocessor';
 
 const config = {
-    preprocess: [importAssets()],
+    preprocess: [assetsPreprocessor()],
     kit: {
         files: {
-			assets: 'static'
+		assets: 'static'
         }
         // ...
     }
