@@ -1,7 +1,7 @@
 /* eslint @typescript-eslint/no-var-requires: "off" */
 const preprocess = require('../src/main');
 import { DEFAULT_ATTRIBUTES } from '../src/defaults';
-import { Processed } from 'svelte/types/compiler/preprocess/types';
+import type { Processed } from 'svelte/compiler';
 
 const TEST_ASSET = __dirname + '/assets/asset1.png';
 const isVoid = (tag): boolean => /^(area|base|br|col|embed|hr|img|input|link|meta|param|source|track|wbr)$/i.test(tag);
