@@ -17,8 +17,9 @@
     "noImplicitAny": false,
     "noImplicitThis": false,
     "strictNullChecks": false,
+    "skipLibCheck": true,
     "types": ["jest", "node"],
-    "lib": ["es2018"]
+    "lib": ["es2018", "dom"]
   },
   "include": [
     "src/**/*",
