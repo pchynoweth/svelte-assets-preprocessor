@@ -1,5 +1,5 @@
 import { HTMLElement, Node, NodeType, parse } from 'node-html-parser';
-import { PreprocessorGroup, Processed } from 'svelte/types/compiler/preprocess/types';
+import type { PreprocessorGroup, Processed } from 'svelte/compiler';
 import { DEFAULT_OPTIONS, Options } from './defaults';
 import * as _ from 'lodash';
 
