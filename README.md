@@ -91,45 +91,6 @@ You will need to install another loader to handle the imports appropriately such
   ...
 ```
 
-### With Sapper
-
-[Sapper](https://sapper.svelte.dev/) has two build configurations, one for the client bundle and one for the server. To use `svelte-assets-preprocessor` with Sapper, you need to define it on both configurations.  You will need to use [@rollup/plugin-url](https://github.com/rollup/plugins/tree/master/packages/url) to load assets.
-
-```js
-// ...
-import assetsPreprocessor from 'svelte-assets-preprocessor';
-import path from 'path';
-import url from '@rollup/plugin-url';
-
-const preprocess = assetsPreprocessor({});
-
-export default {
-  client: {
-    plugins: [
-      svelte({
-        preprocess,
-        // ...
-      }),
-      url({
-        fileName: path.join('client', 'assets', '[name].[hash][extname]'),
-        destDir: path.resolve(config.client.output().dir, '..')
-      }),
-  },
-  server: {
-    plugins: [
-      svelte({
-        preprocess,
-        // ...
-      }),
-      url({
-        fileName: path.join('server', 'assets', '[name].[hash][extname]'),
-        destDir: path.resolve(config.server.output().dir, '..')
-      }),
-    ],
-  },
-};
-```
-
 ### With SvelteKit
 
 With [Sveltekit](https://kit.svelte.dev/), [svelte-preprocess](https://github.com/sveltejs/svelte-preprocess) is not a requirement if you just need to preprocess assets.
