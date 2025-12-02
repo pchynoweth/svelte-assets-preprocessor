@@ -1,5 +1,10 @@
 # CHANGELOG
 
+## 1.0.0
+
+* Upgraded to Svelte 5 compatibility
+* Major version bump to indicate stable release
+
 ## 0.0.7
 
 * Upgraded packages
