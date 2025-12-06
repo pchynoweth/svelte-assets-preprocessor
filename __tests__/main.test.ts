@@ -1,4 +1,3 @@
-/* eslint @typescript-eslint/no-var-requires: "off" */
 const preprocess = require('../src/main');
 import { DEFAULT_ATTRIBUTES } from '../src/defaults';
 import type { Processed } from 'svelte/compiler';
@@ -32,7 +31,12 @@ describe('sanity', () => {
 
       <p></p>
     `
-    expect((fixture.markup({ content: input, filename: 'dummy' }) as Processed).code).toBe(input);
+    const output = `
+      <script></script>
+
+      <p></p>
+    `
+    expect((fixture.markup({ content: input, filename: 'dummy' }) as Processed).code).toBe(output);
   });
 });
 
@@ -95,8 +99,7 @@ describe('Pages with script tags', () => {
 
         <${tag} ${attr}="${value}">${closingTag}`,
       output: `
-        <script>import ___ASSET___1 from '${value}';
-        </script>
+        <script>import ___ASSET___1 from '${value}';</script>
 
         <${tag} ${attr}="{___ASSET___1}">${closingTag}`
     }
