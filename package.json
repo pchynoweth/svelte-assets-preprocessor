@@ -15,14 +15,14 @@
     "svelte"
   ],
   "devDependencies": {
-    "@eslint/js": "^9.39.1",
+    "@eslint/js": "^9.39.2",
     "@types/jest": "^30.0.0",
-    "@types/node": "^24.10.1",
-    "@typescript-eslint/eslint-plugin": "~8.48.1",
-    "@typescript-eslint/parser": "~8.48.1",
-    "eslint": "~9.39.1",
+    "@types/node": "^25.0.1",
+    "@typescript-eslint/eslint-plugin": "~8.49.0",
+    "@typescript-eslint/parser": "~8.49.0",
+    "eslint": "~9.39.2",
     "eslint-config-prettier": "~10.1.8",
-    "eslint-plugin-jest": "~29.2.1",
+    "eslint-plugin-jest": "~29.2.2",
     "jest": "~30.2.0",
     "locate-character": "^3.0.0",
     "prettier": "~3.7.4",
@@ -30,7 +30,7 @@
     "ts-jest": "^29.4.6",
     "tsutils": "~3.21.0",
     "typescript": "^5.9.3",
-    "typescript-eslint": "^8.48.1"
+    "typescript-eslint": "^8.49.0"
   },
   "scripts": {
     "clean": "rimraf coverage dist tmp",
@@ -46,7 +46,7 @@
   "dependencies": {
     "lodash": ">=4.17.21",
     "node-html-parser": "^7.0.1",
-    "svelte": "^5.45.5",
+    "svelte": "^5.46.0",
     "tslib": "~2.8.1"
   },
   "repository": {
