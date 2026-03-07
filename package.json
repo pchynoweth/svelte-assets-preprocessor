@@ -17,10 +17,10 @@
   "devDependencies": {
     "@eslint/js": "^10.0.1",
     "@types/jest": "^30.0.0",
-    "@types/node": "^25.3.2",
+    "@types/node": "^25.3.5",
     "@typescript-eslint/eslint-plugin": "~8.56.1",
     "@typescript-eslint/parser": "~8.56.1",
-    "eslint": "~10.0.2",
+    "eslint": "~10.0.3",
     "eslint-config-prettier": "~10.1.8",
     "eslint-plugin-jest": "~29.15.0",
     "jest": "~30.2.0",
@@ -45,8 +45,8 @@
   "license": "MIT",
   "dependencies": {
     "lodash": ">=4.17.23",
-    "node-html-parser": "^7.0.2",
-    "svelte": "^5.53.6",
+    "node-html-parser": "^7.1.0",
+    "svelte": "^5.53.7",
     "tslib": "~2.8.1"
   },
   "repository": {
